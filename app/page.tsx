@@ -1,30 +1,33 @@
+"use client";
+
 import React, { useEffect, useState } from "react";
 
-export default function GenerationalStewardshipWebsite() {
-  const bibleVerses = [
-    {
-      reference: "Proverbs 13:22",
-      verse: "A good person leaves an inheritance for their children's children.",
-      focus: "Legacy",
-    },
-    {
-      reference: "Matthew 6:21",
-      verse: "For where your treasure is, there your heart will be also.",
-      focus: "Stewardship",
-    },
-    {
-      reference: "Luke 16:10",
-      verse: "Whoever can be trusted with very little can also be trusted with much.",
-      focus: "Faithfulness",
-    },
-    {
-      reference: "1 Timothy 6:17-19",
-      verse: "Put their hope in God, who richly provides us with everything for our enjoyment.",
-      focus: "Wisdom",
-    },
-  ];
+const bibleVerses = [
+  {
+    reference: "Proverbs 13:22",
+    verse: "A good person leaves an inheritance for their children's children.",
+    focus: "Legacy",
+  },
+  {
+    reference: "Matthew 6:21",
+    verse: "For where your treasure is, there your heart will be also.",
+    focus: "Stewardship",
+  },
+  {
+    reference: "Luke 16:10",
+    verse: "Whoever can be trusted with very little can also be trusted with much.",
+    focus: "Faithfulness",
+  },
+  {
+    reference: "1 Timothy 6:17-19",
+    verse: "Put their hope in God, who richly provides us with everything for our enjoyment.",
+    focus: "Wisdom",
+  },
+];
 
+export default function GenerationalStewardshipWebsite() {
   const [activeVerse, setActiveVerse] = useState(0);
+  const [logoError, setLogoError] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -32,7 +35,7 @@ export default function GenerationalStewardshipWebsite() {
     }, 4500);
 
     return () => clearInterval(timer);
-  }, [bibleVerses.length]);
+  }, []);
 
   const services = [
     {
@@ -57,12 +60,6 @@ export default function GenerationalStewardshipWebsite() {
     "Stock Market Basics",
     "Options Risk Management",
     "Futures & Crypto Education",
-  ];
-
-  const dashboardItems = [
-    { label: "S&P 500", value: "Live Market", note: "Track broad market strength" },
-    { label: "Bitcoin", value: "Crypto Watch", note: "Monitor digital asset trends" },
-    { label: "Gold", value: "Legacy Asset", note: "Follow defensive market movement" },
   ];
 
   return (
@@ -120,11 +117,14 @@ export default function GenerationalStewardshipWebsite() {
           <div className="relative">
             <div className="absolute -inset-5 rounded-[2rem] bg-yellow-500/20 blur-3xl" />
             <div className="relative rounded-[2rem] border border-yellow-500/30 bg-black p-4 shadow-2xl shadow-yellow-950/30">
-              <img
-                src="/logo.png"
-                alt="Generational Stewardship logo"
-                className="w-full rounded-[1.5rem] object-cover"
-              />
+              {!logoError ? (
+                <img
+                  src="/logo.png"
+                  alt="Generational Stewardship logo"
+                  onError={() => setLogoError(true)}
+                  className="w-full rounded-[1.5rem] border border-yellow-500/10 object-contain bg-black p-2"
+                />
+              ) : null}
             </div>
           </div>
         </div>
@@ -177,7 +177,7 @@ export default function GenerationalStewardshipWebsite() {
               {bibleVerses[activeVerse].focus}
             </p>
             <p className="mb-5 font-serif text-3xl leading-tight text-yellow-100 md:text-4xl">
-              “{bibleVerses[activeVerse].verse}”
+              &quot;{bibleVerses[activeVerse].verse}&quot;
             </p>
             <p className="text-lg font-bold text-white">
               {bibleVerses[activeVerse].reference}
@@ -276,7 +276,7 @@ export default function GenerationalStewardshipWebsite() {
       </section>
 
       <footer className="border-t border-neutral-900 px-6 py-10 text-center text-sm text-neutral-500">
-        © {new Date().getFullYear()} Generational Stewardship. Faith • Family • Finance • Legacy.
+        © {2020} Generational Stewardship. Faith • Family • Finance • Legacy.
       </footer>
     </main>
   );
