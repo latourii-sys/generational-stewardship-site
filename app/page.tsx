@@ -138,7 +138,7 @@ export default function GenerationalStewardshipWebsite() {
             Partner with a mission-driven brand focused on biblical stewardship, financial education, and long-term family impact.
           </p>
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
-            <a href="mailto:latourii@gmail.com" className="rounded-2xl bg-yellow-500 px-8 py-4 font-bold text-black hover:bg-yellow-300">
+            <a href="mailto:info@generationalstewardship.com" className="rounded-2xl bg-yellow-500 px-8 py-4 font-bold text-black hover:bg-yellow-300">
               Contact Us
             </a>
             <a href="#" className="rounded-2xl border border-neutral-600 bg-black/30 px-8 py-4 font-bold text-white hover:bg-neutral-900">
