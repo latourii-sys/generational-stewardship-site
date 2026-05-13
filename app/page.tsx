@@ -380,7 +380,7 @@ export default function GenerationalStewardshipWebsite() {
               <option>Coaching</option>
               <option>Market education</option>
             </select>
-            <textarea name="message" placeholder="How can we help?" rows="4" className="rounded-2xl border border-neutral-700 bg-black px-5 py-4 text-white outline-none focus:border-yellow-400" />
+            <textarea name="message" placeholder="How can we help?" rows={4} className="rounded-2xl border border-neutral-700 bg-black px-5 py-4 text-white outline-none focus:border-yellow-400" />
             <button type="submit" className="rounded-2xl bg-yellow-500 px-8 py-4 font-bold text-black hover:bg-yellow-300">
               Send Message
             </button>
