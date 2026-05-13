@@ -149,7 +149,7 @@ export default function GenerationalStewardshipWebsite() {
       </section>
 
       <footer className="border-t border-neutral-900 px-6 py-10 text-center text-sm text-neutral-500">
-        © {new Date().getFullYear()} Generational Stewardship. Faith • Family • Finance • Legacy.
+        © {2020} Generational Stewardship. Faith • Family • Finance • Legacy.
       </footer>
     </main>
   );
