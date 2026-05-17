@@ -1,17 +1,11 @@
 "use client";
-import {
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton,
-} from "@clerk/nextjs";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 const bibleVerses = [
   {
     reference: "Proverbs 13:22",
-    verse: "A good man leaves an inheritance for their children's children.",
+    verse: "A good person leaves an inheritance for their children's children.",
     focus: "Legacy",
   },
   {
@@ -31,73 +25,65 @@ const bibleVerses = [
   },
 ];
 
-export default function GenerationalStewardshipWebsite() {
-  const [activeVerse, setActiveVerse] = useState(0);
-  const [logoError, setLogoError] = useState(false);
+const services = [
+  {
+    title: "Biblical Stewardship",
+    text: "Faith-based principles that help families manage resources with wisdom, discipline, and purpose.",
+    icon: "✦",
+  },
+  {
+    title: "Financial Market Education",
+    text: "Practical education across stocks, options, futures, crypto, and long-term wealth-building concepts.",
+    icon: "↗",
+  },
+  {
+    title: "Family Legacy Planning",
+    text: "Guidance for transferring values, financial wisdom, and stewardship habits to the next generation.",
+    icon: "◎",
+  },
+];
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveVerse((current) => (current + 1) % bibleVerses.length);
-    }, 4500);
+const paymentProducts = [
+  {
+    title: "Monthly Membership",
+    description:
+      "Access the morning alert group for daily alerts, live trading, chart reviews from 9:00 AM - 10:30 AM EST Monday through Friday, market education, and community resources.",
+    price: "$25/mo",
+    link: "https://buy.stripe.com/9AQ3ggcfDeMVeAg5kk",
+    button: "Join Membership",
+  },
+  {
+    title: "Futures 4 Week Training Course (Online)",
+    description:
+      "Unlock the potential of the futures market with a comprehensive training course designed for both beginners and experienced traders who want structure, risk discipline, and consistency.",
+    price: "$599",
+    link: "https://buy.stripe.com/28E6oHgZL1D54qrbLR3cc01",
+    button: "Enroll Now",
+  },
+  {
+    title: "1-on-1 Coaching",
+    description: "Private coaching sessions focused on mindset, markets, risk management, and biblical stewardship.",
+    price: "$1199",
+    link: "https://buy.stripe.com/28EfZh24Ra9B9KL4jp3cc02",
+    button: "Book Coaching",
+  },
+];
 
-    return () => clearInterval(timer);
-  }, []);
-
-  const services = [
-    {
-      title: "Biblical Stewardship",
-      text: "Faith-based principles that help families manage resources with wisdom, discipline, and purpose.",
-      icon: "✦",
-    },
-    {
-      title: "Financial Market Education",
-      text: "Practical education across stocks, options, futures, crypto, and long-term wealth-building concepts.",
-      icon: "↗",
-    },
-    {
-      title: "Family Legacy Planning",
-      text: "Guidance for transferring values, financial wisdom, and stewardship habits to the next generation.",
-      icon: "◎",
-    },
-  ];
-
-  const paymentProducts = [
-    {
-      title: "Monthly Membership",
-      description: "Access morning alert group for daily alerts, Live trading & chart reviews from 9am - 10:30am Est Monday - Friday., market education, and community resources.",
-      price: "$25/mo",
-      link: "https://buy.stripe.com/9AQ3ggcfDeMVeAg5kk",
-      button: "Join Membership",
-    },
-    {
-      title: "Futures 4 Week Training Course (Online)",
-      description: "Unlock the potential of the Futures Market with our comprehensive training course. Designed for both beginners and seasoned traders, this course provides a thorough introduction to futures trading.",
-      price: "$599",
-      link: "https://buy.stripe.com/28E6oHgZL1D54qrbLR3cc01",
-      button: "Enroll Now",
-    },
-    {
-      title: "1-on-1 Coaching",
-      description: "Private coaching sessions focused on mindset, markets, and stewardship.",
-      price: "$1199",
-      link: "https://buy.stripe.com/28EfZh24Ra9B9KL4jp3cc02",
-      button: "Book Coaching",
-    },
-  ];
-
-  const courses = [
+const courses = [
   {
     title: "Foundations of Biblical Wealth",
-    description: "Build a faith-centered foundation for money, stewardship, discipline, and generational legacy through biblical principles and practical financial application.",
+    description:
+      "Build a faith-centered foundation for money, stewardship, discipline, and generational legacy through biblical principles and practical financial application.",
     level: "Beginner Friendly",
     duration: "4 Core Modules",
-    lessons:  [
+    lessons: [
       "Biblical view of stewardship and ownership",
       "Budgeting, giving, saving, and debt discipline",
       "Setting family financial goals with purpose",
       "Creating a legacy statement and household plan",
     ],
-    outcome: "Students leave with a biblical financial blueprint, written family legacy plan, practical stewardship systems, and a long-term vision for building generational impact.",
+    outcome:
+      "Students leave with a biblical financial blueprint, written family legacy plan, practical stewardship systems, and a long-term vision for building generational impact.",
   },
   {
     title: "Stock Market Basics",
@@ -140,16 +126,60 @@ export default function GenerationalStewardshipWebsite() {
   },
 ];
 
+function runContentChecks() {
+  console.assert(bibleVerses.length > 0, "Bible verse carousel needs at least one verse.");
+  bibleVerses.forEach((item) => {
+    console.assert(item.reference && item.verse && item.focus, `Invalid Bible verse item: ${item.reference || "missing reference"}`);
+  });
+
+  courses.forEach((course) => {
+    console.assert(Array.isArray(course.lessons) && course.lessons.length > 0, `Course needs lessons: ${course.title}`);
+  });
+
+  paymentProducts.forEach((product) => {
+    console.assert(product.link.startsWith("https://"), `Payment link must be a full HTTPS URL: ${product.title}`);
+  });
+}
+
+function AuthButton({ children, variant = "primary" }: { children: React.ReactNode; variant?: "primary" | "secondary" }) {
+  const className =
+    variant === "primary"
+      ? "rounded-xl border border-yellow-500/30 bg-yellow-500 px-5 py-2 font-bold text-black transition hover:bg-yellow-300"
+      : "block w-full rounded-2xl border border-neutral-700 bg-neutral-950 px-8 py-4 text-center font-bold text-white hover:border-yellow-400";
+
   return (
-    <main className="min-h-screen bg-neutral-950 text-white overflow-hidden">
+    <a href="/sign-in" className={className}>
+      {children}
+    </a>
+  );
+}
+
+export default function GenerationalStewardshipWebsite() {
+  const [activeVerse, setActiveVerse] = useState(0);
+  const [logoError, setLogoError] = useState(false);
+
+  const currentVerse = useMemo(() => bibleVerses[activeVerse] ?? bibleVerses[0], [activeVerse]);
+
+  useEffect(() => {
+    runContentChecks();
+
+    const timer = window.setInterval(() => {
+      setActiveVerse((current) => (current + 1) % bibleVerses.length);
+    }, 4500);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  return (
+    <main className="min-h-screen overflow-hidden bg-neutral-950 text-white">
       <section className="relative min-h-screen border-b border-yellow-500/20">
         <div className="absolute inset-0 bg-gradient-to-b from-yellow-950/30 via-neutral-950 to-black" />
-        <div className="absolute top-0 right-0 h-96 w-96 rounded-full bg-yellow-500/10 blur-3xl" />
+        <div className="absolute right-0 top-0 h-96 w-96 rounded-full bg-yellow-500/10 blur-3xl" />
         <div className="absolute bottom-20 left-10 h-72 w-72 rounded-full bg-yellow-700/10 blur-3xl" />
 
         <nav className="relative z-10 mx-auto flex max-w-7xl items-center justify-between px-6 py-6">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-yellow-200 via-yellow-500 to-yellow-800 text-black font-bold">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-yellow-200 via-yellow-500 to-yellow-800 font-bold text-black">
               GS
             </div>
             <div>
@@ -157,18 +187,14 @@ export default function GenerationalStewardshipWebsite() {
               <p className="text-xs uppercase tracking-[0.3em] text-yellow-400">Stewardship</p>
             </div>
           </div>
+
           <div className="hidden items-center gap-8 text-sm text-neutral-300 md:flex">
             <a href="#mission" className="hover:text-yellow-400">Mission</a>
             <a href="#services" className="hover:text-yellow-400">Services</a>
             <a href="#legacy" className="hover:text-yellow-400">Legacy</a>
             <a href="#courses" className="hover:text-yellow-400">Courses</a>
             <a href="#contact" className="hover:text-yellow-400">Contact</a>
-            <a
-              href="#member-login"
-              className="rounded-xl border border-yellow-500/30 bg-yellow-500 px-5 py-2 font-bold text-black transition hover:bg-yellow-300"
-            >
-              Member Login
-            </a>
+            <AuthButton>Member Login</AuthButton>
           </div>
         </nav>
 
@@ -206,7 +232,7 @@ export default function GenerationalStewardshipWebsite() {
                   src="/logo.png"
                   alt="Generational Stewardship logo"
                   onError={() => setLogoError(true)}
-                  className="w-full rounded-[1.5rem] border border-yellow-500/10 object-contain bg-black p-2"
+                  className="w-full rounded-[1.5rem] border border-yellow-500/10 bg-black p-2 object-contain"
                 />
               ) : (
                 <div className="flex aspect-square w-full flex-col items-center justify-center rounded-[1.5rem] border border-yellow-500/20 bg-black p-8 text-center">
@@ -267,20 +293,15 @@ export default function GenerationalStewardshipWebsite() {
 
           <div className="rounded-[2rem] border border-yellow-500/30 bg-black/70 p-8 text-center shadow-2xl shadow-yellow-950/20">
             <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-yellow-500/15 text-4xl text-yellow-400">✝</div>
-            <p className="mb-3 text-sm uppercase tracking-[0.3em] text-yellow-400">
-              {bibleVerses[activeVerse].focus}
-            </p>
-            <p className="mb-5 font-serif text-3xl leading-tight text-yellow-100 md:text-4xl">
-              &quot;{bibleVerses[activeVerse].verse}&quot;
-            </p>
-            <p className="text-lg font-bold text-white">
-              {bibleVerses[activeVerse].reference}
-            </p>
+            <p className="mb-3 text-sm uppercase tracking-[0.3em] text-yellow-400">{currentVerse.focus}</p>
+            <p className="mb-5 font-serif text-3xl leading-tight text-yellow-100 md:text-4xl">&quot;{currentVerse.verse}&quot;</p>
+            <p className="text-lg font-bold text-white">{currentVerse.reference}</p>
 
             <div className="mt-8 flex justify-center gap-3">
               {bibleVerses.map((verse, index) => (
                 <button
                   key={verse.reference}
+                  type="button"
                   onClick={() => setActiveVerse(index)}
                   className={`h-3 rounded-full transition-all ${
                     activeVerse === index ? "w-10 bg-yellow-400" : "w-3 bg-neutral-700 hover:bg-neutral-500"
@@ -299,6 +320,7 @@ export default function GenerationalStewardshipWebsite() {
             <p className="mb-4 text-sm uppercase tracking-[0.3em] text-yellow-400">Course Pages</p>
             <h2 className="font-serif text-4xl font-bold md:text-6xl">Learn. Apply. Steward well.</h2>
           </div>
+
           <div className="grid gap-8 lg:grid-cols-2">
             {courses.map((course) => (
               <div key={course.title} className="rounded-3xl border border-neutral-800 bg-gradient-to-b from-neutral-950 to-black p-8 shadow-2xl transition hover:-translate-y-2">
@@ -337,7 +359,7 @@ export default function GenerationalStewardshipWebsite() {
         </div>
       </section>
 
-            <section id="member-login" className="border-y border-yellow-500/10 bg-gradient-to-b from-neutral-950 to-black px-6 py-24">
+      <section id="member-login" className="border-y border-yellow-500/10 bg-gradient-to-b from-neutral-950 to-black px-6 py-24">
         <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <div>
             <p className="mb-4 text-sm uppercase tracking-[0.3em] text-yellow-400">Member Lesson Access</p>
@@ -362,32 +384,20 @@ export default function GenerationalStewardshipWebsite() {
             <div className="mb-8 text-center">
               <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-yellow-500 text-2xl font-bold text-black">GS</div>
               <h3 className="font-serif text-3xl font-bold">Member Login</h3>
-              <p className="mt-3 text-neutral-400">Enter your account details to access your lesson dashboard.</p>
+              <p className="mt-3 text-neutral-400">Sign in to access your lesson dashboard.</p>
             </div>
 
-            <SignedOut>
-  <SignInButton mode="modal">
-    <button className="w-full rounded-2xl bg-yellow-500 px-8 py-4 font-bold text-black hover:bg-yellow-300">
-      Member Login
-    </button>
-  </SignInButton>
-</SignedOut>
-
-<SignedIn>
-  <div className="space-y-5 text-center">
-    <UserButton afterSignOutUrl="/" />
-
-    <a
-      href="/lessons"
-      className="inline-block w-full rounded-2xl bg-yellow-500 px-8 py-4 font-bold text-black hover:bg-yellow-300"
-    >
-      Access Lessons
-    </a>
-  </div>
-</SignedIn>
+            <div className="space-y-4">
+              <a href="/sign-in" className="block w-full rounded-2xl bg-yellow-500 px-8 py-4 text-center font-bold text-black hover:bg-yellow-300">
+                Sign In to Access Lessons
+              </a>
+              <a href="/sign-up" className="block w-full rounded-2xl border border-neutral-700 bg-neutral-950 px-8 py-4 text-center font-bold text-white hover:border-yellow-400">
+                Create Member Account
+              </a>
+            </div>
 
             <div className="mt-6 rounded-2xl border border-yellow-500/10 bg-yellow-500/10 p-5 text-sm text-yellow-100">
-              This is the front-end login design. To make it fully functional, connect Clerk, Supabase, Firebase, or another authentication provider.
+              Clerk-ready setup: create /sign-in and /sign-up routes with Clerk, then protect your /lessons page with Clerk middleware.
             </div>
 
             <div className="mt-8 grid gap-4">
@@ -425,12 +435,7 @@ export default function GenerationalStewardshipWebsite() {
                     <p className="mt-2 max-w-xl text-neutral-400">{product.description}</p>
                   </div>
 
-                  <a
-                    href={product.link}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-block rounded-2xl bg-yellow-500 px-8 py-4 text-center font-bold text-black hover:bg-yellow-300"
-                  >
+                  <a href={product.link} target="_blank" rel="noreferrer" className="inline-block rounded-2xl bg-yellow-500 px-8 py-4 text-center font-bold text-black hover:bg-yellow-300">
                     {product.button}
                   </a>
                 </div>
@@ -446,11 +451,12 @@ export default function GenerationalStewardshipWebsite() {
           <p className="mb-9 text-lg text-neutral-300">
             Partner with a mission-driven brand focused on biblical stewardship, financial education, and long-term family impact.
           </p>
+
           <form action="https://formspree.io/f/xzdowjan" method="POST" className="mx-auto mb-8 grid max-w-2xl gap-4 text-left">
             <input name="name" placeholder="Your name" className="rounded-2xl border border-neutral-700 bg-black px-5 py-4 text-white outline-none focus:border-yellow-400" />
             <input name="email" type="email" placeholder="Your email" className="rounded-2xl border border-neutral-700 bg-black px-5 py-4 text-white outline-none focus:border-yellow-400" />
-            <select name="interest" className="rounded-2xl border border-neutral-700 bg-black px-5 py-4 text-white outline-none focus:border-yellow-400">
-              <option>I'm interested in...</option>
+            <select name="interest" className="rounded-2xl border border-neutral-700 bg-black px-5 py-4 text-white outline-none focus:border-yellow-400" defaultValue="">
+              <option value="" disabled>I'm interested in...</option>
               <option>Courses</option>
               <option>Membership</option>
               <option>Coaching</option>
@@ -461,16 +467,17 @@ export default function GenerationalStewardshipWebsite() {
               Send Message
             </button>
           </form>
+
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <a href="mailto:latourii@gmail.com" className="rounded-2xl border border-neutral-600 bg-black/30 px-8 py-4 font-bold text-white hover:bg-neutral-900">
               Email Directly
             </a>
-            
           </div>
-        </div>      </section>
+        </div>
+      </section>
 
       <footer className="border-t border-neutral-900 px-6 py-10 text-center text-sm text-neutral-500">
-        © {2020} Generational Stewardship. Faith • Family • Finance • Legacy.
+        © {new Date().getFullYear()} Generational Stewardship. Faith • Family • Finance • Legacy.
       </footer>
     </main>
   );
