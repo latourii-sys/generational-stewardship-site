@@ -1,6 +1,12 @@
 "use client";
 
 import React, { useEffect, useMemo, useState } from "react";
+import {
+  SignInButton,
+  SignUpButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
 
 const bibleVerses = [
   {
@@ -141,22 +147,40 @@ function runContentChecks() {
   });
 }
 
-function AuthButton({ children, variant = "primary" }: { children: React.ReactNode; variant?: "primary" | "secondary" }) {
-  const className =
-    variant === "primary"
-      ? "rounded-xl border border-yellow-500/30 bg-yellow-500 px-5 py-2 font-bold text-black transition hover:bg-yellow-300"
-      : "block w-full rounded-2xl border border-neutral-700 bg-neutral-950 px-8 py-4 text-center font-bold text-white hover:border-yellow-400";
+function AuthButton({ children }: { children: React.ReactNode }) {
+  const { isLoaded, isSignedIn } = useUser();
+
+  if (!isLoaded) {
+    return null;
+  }
+
+  if (!isSignedIn) {
+    return (
+      <SignInButton mode="modal">
+        <button className="rounded-xl border border-yellow-500/30 bg-yellow-500 px-5 py-2 font-bold text-black transition hover:bg-yellow-300">
+          {children}
+        </button>
+      </SignInButton>
+    );
+  }
 
   return (
-    <a href="/sign-in" className={className}>
-      {children}
-    </a>
+    <div className="flex items-center gap-4">
+      <a
+        href="/lessons"
+        className="rounded-xl border border-yellow-500/30 bg-yellow-500 px-5 py-2 font-bold text-black transition hover:bg-yellow-300"
+      >
+        Lessons
+      </a>
+      <UserButton />
+    </div>
   );
 }
 
 export default function GenerationalStewardshipWebsite() {
   const [activeVerse, setActiveVerse] = useState(0);
   const [logoError, setLogoError] = useState(false);
+  const { isLoaded, isSignedIn } = useUser();
 
   const currentVerse = useMemo(() => bibleVerses[activeVerse] ?? bibleVerses[0], [activeVerse]);
 
@@ -388,16 +412,33 @@ export default function GenerationalStewardshipWebsite() {
             </div>
 
             <div className="space-y-4">
-              <a href="/sign-in" className="block w-full rounded-2xl bg-yellow-500 px-8 py-4 text-center font-bold text-black hover:bg-yellow-300">
-                Sign In to Access Lessons
-              </a>
-              <a href="/sign-up" className="block w-full rounded-2xl border border-neutral-700 bg-neutral-950 px-8 py-4 text-center font-bold text-white hover:border-yellow-400">
-                Create Member Account
-              </a>
-            </div>
+              {!isLoaded ? null : !isSignedIn ? (
+                <>
+                  <SignInButton mode="modal">
+                    <button className="block w-full rounded-2xl bg-yellow-500 px-8 py-4 text-center font-bold text-black hover:bg-yellow-300">
+                      Sign In to Access Lessons
+                    </button>
+                  </SignInButton>
 
-            <div className="mt-6 rounded-2xl border border-yellow-500/10 bg-yellow-500/10 p-5 text-sm text-yellow-100">
-              Clerk-ready setup: create /sign-in and /sign-up routes with Clerk, then protect your /lessons page with Clerk middleware.
+                  <SignUpButton mode="modal">
+                    <button className="block w-full rounded-2xl border border-neutral-700 bg-neutral-950 px-8 py-4 text-center font-bold text-white hover:border-yellow-400">
+                      Create Member Account
+                    </button>
+                  </SignUpButton>
+                </>
+              ) : (
+                <div className="space-y-4">
+                  <a
+                    href="/lessons"
+                    className="block w-full rounded-2xl bg-yellow-500 px-8 py-4 text-center font-bold text-black hover:bg-yellow-300"
+                  >
+                    Go to Lesson Dashboard
+                  </a>
+                  <div className="flex justify-center">
+                    <UserButton />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="mt-8 grid gap-4">
