@@ -217,6 +217,7 @@ export default function GenerationalStewardshipWebsite() {
             <a href="#services" className="hover:text-yellow-400">Services</a>
             <a href="#legacy" className="hover:text-yellow-400">Legacy</a>
             <a href="#courses" className="hover:text-yellow-400">Courses</a>
+            <a href="#member-login" className="hover:text-yellow-400">Member</a>
             <a href="#contact" className="hover:text-yellow-400">Contact</a>
             <AuthButton>Member Login</AuthButton>
           </div>
