@@ -470,7 +470,7 @@ export default function GenerationalStewardshipWebsite() {
 
       <section id="payments" className="border-y border-yellow-500/10 bg-neutral-950 px-6 py-20">
         <div className="mx-auto max-w-5xl rounded-[2rem] border border-yellow-500/30 bg-gradient-to-b from-yellow-950/30 to-black p-7">
-          <p className="mb-4 text-sm uppercase tracking-[0.3em] text-yellow-400">Stripe Payments</p>
+          <p className="mb-4 text-sm uppercase tracking-[0.3em] text-yellow-400">Programs</p>
           <h2 className="font-serif text-3xl font-bold">Choose your next step.</h2>
           <p className="mt-5 leading-relaxed text-neutral-300">
             Join the community, enroll in training, or book private coaching through secure Stripe checkout.
