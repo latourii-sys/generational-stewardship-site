@@ -11,7 +11,7 @@ import {
 const bibleVerses = [
   {
     reference: "Proverbs 13:22",
-    verse: "A good person leaves an inheritance for their children's children.",
+    verse: "A good man leaves an inheritance for their children's children.",
     focus: "Legacy",
   },
   {
@@ -53,11 +53,19 @@ const paymentProducts = [
   {
     title: "Monthly Membership",
     description:
-      "Access the morning alert group for daily alerts, live trading, chart reviews from 9:00 AM - 10:30 AM EST Monday through Friday, market education, and community resources.",
+      "Do not trade alone. We teamed up with We Talk Charts. Access the morning futures group for daily live trading, and chart reviews from 9:00 AM - 10:30 AM EST Monday through Friday, market education, and access to discord community group.",
     price: "$25/mo",
     link: "https://buy.stripe.com/9AQ3ggcfDeMVeAg5kk",
     button: "Join Membership",
   },
+   {
+  title: "GS Candlestick Workbook",
+  description:
+    "Master candlestick patterns, trading psychology, risk management, and biblical stewardship principles with this comprehensive printable trading workbook.",
+  price: "$27.99",
+  link: "https://buy.stripe.com/bJeaEXaBngxZ7CDeY33cc03",
+  button: "Buy Workbook",
+},
   {
     title: "Futures 4 Week Training Course (Online)",
     description:
@@ -217,6 +225,7 @@ export default function GenerationalStewardshipWebsite() {
             <a href="#services" className="hover:text-yellow-400">Services</a>
             <a href="#legacy" className="hover:text-yellow-400">Legacy</a>
             <a href="#courses" className="hover:text-yellow-400">Courses</a>
+            <a href="/sales" className="hover:text-yellow-400">Sales</a>
             <a href="#member-login" className="hover:text-yellow-400">Member</a>
             <a href="#contact" className="hover:text-yellow-400">Contact</a>
             <AuthButton>Member Login</AuthButton>
@@ -376,7 +385,7 @@ export default function GenerationalStewardshipWebsite() {
                 </div>
 
                 <a href="#payments" className="mt-7 inline-block rounded-2xl bg-yellow-500 px-6 py-3 text-sm font-bold text-black hover:bg-yellow-300">
-                  View Enrollment Options
+                  Coming Soon
                 </a>
               </div>
             ))}
